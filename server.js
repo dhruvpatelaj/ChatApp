@@ -1,29 +1,25 @@
-
-//* load up express
 var express = require('express')
-
-//* store express calls
+var bodyParser = require('body-parser')
 var app = express()
 
-//* use the html page
 app.use(express.static(__dirname))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}))
 
-//place holder messages lists
 var messages = [
-    {name: 'Timon', message: 'Sista'},
-    {name: 'Pumba', message: 'Brudda'}
-
+    {name: 'Tim', message: 'Hi'},
+    {name: 'Jane', message: 'Hello'}
 ]
 
-/**  
- * *create a new html page: /message
- * allows for requests and responses.
-*/
-app.get('/messages', (req, res) => {
-    res.send(messages);
+app.get('/messages', (req, res) =>{
+    res.send(messages)
 })
 
-//* the port it is listening on
-app.listen(3000, () => {
-    console.log("Server is listening")
+app.post('/messages', (req, res) =>{
+    messages.push(req.body)
+    res.sendStatus(200)
+})
+
+var server = app.listen(3000, () => {
+    console.log('server is listening on port', server.address().port)
 })
